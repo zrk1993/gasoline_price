@@ -29,9 +29,10 @@ export async function crawlDayData(day: string) {
     return {
       day: dayjs(v.DIM_DATE).format('YYYY-MM-DD'),
       province: v.CITYNAME,
-      v89: v.V89,
+      v89: v.V89, // 89#汽油	92#汽油	95#汽油	0#柴油
       v92: v.V92,
       v95: v.V95,
+      v0: v.V0
     }
   }) || []
   let yearData: any[] = [];
