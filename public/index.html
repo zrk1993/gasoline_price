@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>油价信息</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+  <style>
+    #main {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+  <div id="main"></div>
+  <script>
+    var myChart = echarts.init(document.getElementById('main'))
+    fetch('/gasoline' + location.search).then(v => {
+      v.json().then(d => {
+        if (d.code != 0) {
+          return
+        }
+        var option = {
+          grid: {
+            left: '60',
+            right: '60',
+            top: '50',
+            bottom: '50'
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          xAxis: {
+            type: 'category',
+            data: d.data.map(v => v.day),
+            boundaryGap: false,
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              showMaxLabel: true,
+              showMinLabel: true,
+              color: '#999',
+              fontSize: 13
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#E8EBF1'
+              }
+            }
+          },
+          yAxis: {
+            show: true,
+            nameTextStyle: {
+              color: '#666',
+              fontWeight: '400',
+              padding: [0, 40, 0, 0]
+            },
+            splitNumber: 5,
+            type: 'value',
+            min: 4,
+            axisLabel: {
+              color: '#999',
+              fontSize: 12
+            },
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              lineStyle: {
+                color: 'rgba(65, 97, 128, 0.05)'
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                type: 'solid',
+                color: 'rgba(65, 97, 128, 0.05)'
+              }
+            }
+          },
+          series: [
+            {
+              data: d.data.map(v => v.v92),
+              type: 'line',
+              smooth: true,
+              symbol: 'circle',
+              symbolSize: 2,
+              emphasis: {
+                itemStyle: {
+                  opacity: 1,
+                  borderWidth: 2,
+                  borderColor: '#ffffff'
+                }
+              }
+            }
+          ]
+        }
+        myChart.setOption(option)
+
+      })
+    })
+  </script>
+</body>
+
+</html>

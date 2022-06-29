@@ -1,32 +1,22 @@
+import dayjs from 'dayjs';
 import { joi, Use, Context, createParamDecorator, Controller, Description, Get, QuerySchame, Ctx, Query, Post, Body, BodySchame } from 'koast';
+import * as eastmoneyService from './eastmoney.service'
 
-const testUrl = createParamDecorator((ctx, data) => {
-  return ctx.URL + data
-});
-
-@Controller('/test')
-@Description('测试路由')
+@Controller('/')
 export default class Test {
-  @Get('/hi')
-  @Description('get 参数')
+  @Get('/gasoline')
   @QuerySchame({
-    username: joi.string().required(),
-    password: joi.string().required(),
+    year: joi.string().required(),
+    province: joi.string(),
   })
-  @Use(async (ctx, next) => {
-    console.log('use middleware');
-    await next();
-  })
-  async hi(@Ctx() ctx: Context, @Query() query: any, @testUrl('自定义参数装饰器') urrl: any) {
-    return { code: 0, message: 'hi', data: query, urrl };
-  }
-
-  @Post('/test2')
-  @BodySchame({
-    username: joi.string().required(),
-    password: joi.string().required(),
-  })
-  changeName(@Body() body: any) {
-    return { code: 0, data: body };
+  async gasoline(@Ctx() ctx: Context, @Query() query: any) {
+    let data = []
+    for (let index = 0; index < (query.year || 1); index++) {
+      const year = dayjs().subtract(index, 'year').format('YYYY')
+      const d = await eastmoneyService.getYearData(year)
+      data = data.concat(d)
+    }
+    data = data.reverse().filter(v => query.province ? v.province === query.province : true)
+    return { code: 0, message: 'success', data };
   }
 }
