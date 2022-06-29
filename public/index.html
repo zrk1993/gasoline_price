@@ -89,6 +89,13 @@
           series: [
             {
               data: d.data.map(v => v.v92),
+              markLine: {
+                data: [
+                  {
+                    name: '平均线',
+                    type: 'average'
+                  },]
+              },
               type: 'line',
               smooth: true,
               symbol: 'circle',
