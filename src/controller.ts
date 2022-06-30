@@ -6,8 +6,8 @@ import * as eastmoneyService from './eastmoney.service'
 export default class Test {
   @Get('/gasoline')
   @QuerySchame({
-    year: joi.string().required(),
-    province: joi.string(),
+    year: joi.string().default('3'),
+    province: joi.string().default('福建'),
   })
   async gasoline(@Ctx() ctx: Context, @Query() query: any) {
     let data = []
