@@ -13,8 +13,8 @@ async function main() {
   // console.log('swagger address http://localhost:3000/swagger-ui/index.html')
 
   app.useRouter([routers]);
-  app.listen(3000, () => {
-    console.log('server start on http://localhost:3000')
+  app.listen(3556, () => {
+    console.log('server start on http://localhost:3556')
   });
 
   eastmoneyService.work()
