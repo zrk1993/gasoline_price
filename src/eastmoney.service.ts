@@ -3,6 +3,17 @@ import fs from 'fs'
 import path from 'path'
 import dayjs from 'dayjs'
 
+export async function work() {
+  setInterval(() => {
+    try {
+      console.log('do work')
+      crawlDayData(dayjs().format('YYYY-MM-DD'))
+    } catch (error) {
+      console.error(error.message)
+    }
+  }, 1000 * 60 * 60 * 24)
+}
+
 export async function getYearData(y: string) {
   const f = path.join(__dirname, '..', 'data', y + '.txt')
   if (!fs.existsSync(f)) {
